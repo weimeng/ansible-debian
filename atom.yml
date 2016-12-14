@@ -1,0 +1,14 @@
+---
+- hosts: all
+  tasks:
+  - name: install atom packages
+    command: "apm install {{ item }}"
+    with_items:
+      - file-icons
+      - language-babel
+      - language-haml
+      - language-rspec
+      - language-slim
+      - linter
+      - linter-rubocop
+      - pigments
