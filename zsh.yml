@@ -1,0 +1,11 @@
+---
+- hosts: all
+  tasks:
+    - name: install zsh package
+      become: yes
+      apt: name=zsh
+
+    # For best results, run this step before cloning dotfiles repo. Otherwise it
+    # will detect ~/.oh-my-zsh and cancel the oh-my-zsh installation.
+    - name: install oh-my-zsh
+      shell: sh -c "$(curl -fsSL https://raw.githubusercontent.com/robbyrussell/oh-my-zsh/master/tools/install.sh)"
