@@ -1,0 +1,34 @@
+---
+- hosts: all
+  tasks:
+    # https://github.com/rbenv/ruby-build/wiki#suggested-build-environment
+    - name: set up ruby build environment
+      become: yes
+      apt: name={{ item }}
+      with_items:
+        - autoconf
+        - bison
+        - build-essential
+        - libssl-dev
+        - libyaml-dev
+        - libreadline6-dev
+        - zlib1g-dev
+        - libncurses5-dev
+        - libffi-dev
+        - libgdbm3
+        - libgdbm-dev
+
+    - name: clone rbenv
+      git:
+        repo: https://github.com/rbenv/rbenv.git
+        dest: ~/.rbenv
+
+    - name: compile dynamic bash extension to speed up rbenv
+      command: src/configure && make -C src
+      args:
+        chdir: ~/.rbenv
+
+    - name: clone ruby-build
+      git:
+        repo: https://github.com/rbenv/ruby-build.git
+        dest: ~/.rbenv/plugins/ruby-build
