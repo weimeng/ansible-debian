@@ -7,7 +7,7 @@
 
   - name: add postgresql apt repository
     apt_repository:
-      repo: deb http://apt.postgresql.org/pub/repos/apt/ jessie-pgdg main
+      repo: deb http://apt.postgresql.org/pub/repos/apt/ {{ ansible_distribution_release }}-pgdg main
       update_cache: yes
 
   - name: install postgresql packages
@@ -16,23 +16,29 @@
       - libpq-dev
       - postgresql
 
-  - name: install ansible postgresql dependencies
-    pip:
-      name: psycopg2
-
-  - name: get the username running the script
-    command: whoami
-    register: host_username
-    become: no
-
-  - name: set up default postgresql user
-    postgresql_user:
-      name: "{{ host_username.stdout }}"
-      password: password
-      role_attr_flags: SUPERUSER
-    become_user: postgres
-
-  - name: set up default postgresql database
-    postgresql_db:
-      name: "{{ host_username.stdout }}"
-    become_user: postgres
+  # These commands don't work on Bash on Ubuntu on Windows.
+  #
+  # Instead, manually run:
+  #   - sudo su -c 'createuser -s weimeng'
+  #   - sudo su -c 'createdb weimeng'
+  #
+  # - name: install ansible postgresql dependencies
+  #   pip:
+  #     name: psycopg2
+  #
+  # - name: get the username running the script
+  #   command: whoami
+  #   register: host_username
+  #   become: no
+  #
+  # - name: set up default postgresql user
+  #   postgresql_user:
+  #     name: "{{ host_username.stdout }}"
+  #     password: password
+  #     role_attr_flags: SUPERUSER
+  #   become_user: postgres
+  #
+  # - name: set up default postgresql database
+  #   postgresql_db:
+  #     name: "{{ host_username.stdout }}"
+  #   become_user: postgres
